@@ -12,8 +12,8 @@ RGB8 像素的格式化
 '''
 
 # for question: Initializing libiomp5md.dll, but found libiomp5 already initialized.
-import os
-os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
+# import os
+# os.environ["KMP_DUPLICATE_LIB_OK"]="TRUE"
 
 import tensorflow as tf
 import numpy as np
@@ -34,14 +34,14 @@ def category():
 
     # 必须预处理数据
     # 创建新画布
-    #plt.figure()
+    plt.figure()
     # 将图像加到画布中
-    #plt.imshow(train_images[1500])
+    plt.imshow(train_images[1500])
     # 颜色条 数值与颜色的直观表示
-    #plt.colorbar()
+    plt.colorbar()
     # 是否显示网格
-    #plt.grid(True)
-    #plt.show()
+    plt.grid(True)
+    plt.show()
 
     # 训练集和测试集 数据进行规范化 都除以255 变为0-1之间的数
     train_images = train_images / 255.0
