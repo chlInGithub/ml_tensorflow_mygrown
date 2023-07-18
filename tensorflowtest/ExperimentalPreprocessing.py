@@ -68,7 +68,7 @@ def preprocessing_and_model(train_ds):
     """
     all_inputs, encoded_features = preprocessing_feature(train_ds)
 
-    # 多个特征张量 拼接为 一个张量
+    # 生成一个 concatenate 连接层，用于将 多个特征张量 拼接为 一个张量，
     all_features = tf.keras.layers.concatenate(encoded_features)
     print('all_inputs: ', list(all_inputs),
           '\n encoded_features : ', list(encoded_features),
@@ -111,7 +111,7 @@ def experimental_preprocessing():
 
     train, val, test = split_2_train_val_test(dataframe)
 
-    # test_encode(train)
+    test_encode(train)
 
     # 构建元素为分批数据的dataset
     batch_size = 256
@@ -126,6 +126,8 @@ def experimental_preprocessing():
 
     loss, accuracy = model.evaluate(test_ds)
     print("Accuracy", accuracy)
+
+    predictions = model.predict(test_ds)
 
     # 保存函数式模型的标准方式是调用 model.save() 将整个模型保存为单个文件
     # 保存的文件包括：
@@ -195,7 +197,8 @@ def predict_one():
         'PhotoAmt': 2,
     }
 
-    # {key: val张量}
+    # 转化为字典{'Type': <tf.Tensor: shape=(1,), dtype=string, numpy=array([b'Cat'], dtype=object)>,...}
+    # 如果使用原来的数据，则ValueError: Failed to find data adapter that can handle input: (<class 'dict'> containing {"<class 'str'>"} keys and {"<class 'str'>", "<class 'int'>"} values), <class 'NoneType'>
     input_dict = {name: tf.convert_to_tensor([value]) for name, value in sample.items()}
     predictions = model.predict(input_dict)
     prob = tf.nn.sigmoid(predictions[0])
@@ -218,7 +221,8 @@ def test_encode(train):
     [(train_features, train_labels)] = train_ds.skip(2).take(1)
     # 预处理层的使用
     normalization_layer = get_normalization_layer('PhotoAmt', train_ds)
-    print('PhotoAmt origin ', train_features['PhotoAmt'], ' after normal ', normalization_layer(train_features['PhotoAmt']))
+    normalization_layer_result = normalization_layer(train_features['PhotoAmt'])
+    print('PhotoAmt origin ', train_features['PhotoAmt'], ' after normal ', normalization_layer_result)
 
     category_layer = get_category_encoding_layer('Type', train_ds, 'string')
     print('\nType origin ', train_features['Type'], ' after ', category_layer(train_features['Type']))
