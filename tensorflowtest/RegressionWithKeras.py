@@ -47,6 +47,9 @@ def regression():
     """
     print(f'tf version: {tf.__version__}')
 
+    print(tf.concat([[[1], [2]], [[3], [4]]], 1))
+
+
     # 第0步：准备原始数据
     dataset_path = keras.utils.get_file("auto-mpg.data",
                                         "http://archive.ics.uci.edu/ml/machine-learning-databases/auto-mpg/auto-mpg.data")
